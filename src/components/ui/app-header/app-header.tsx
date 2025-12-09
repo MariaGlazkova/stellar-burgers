@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import clsx from 'clsx';
 import styles from './app-header.module.css';
 import { TAppHeaderUIProps } from './type';
 import {
@@ -22,12 +23,12 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({
 
   return (
     <header className={styles.header}>
-      <nav className={`${styles.menu} p-4`}>
+      <nav className={clsx(styles.menu, 'p-4')}>
         <div className={styles.menu_part_left}>
           <div
-            className={`${styles.menu_item} ${
-              isConstructorActive ? styles.link_active : ''
-            }`}
+            className={clsx(styles.menu_item, {
+              [styles.link_active]: isConstructorActive
+            })}
             onClick={onConstructorClick}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -37,15 +38,15 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({
             role='button'
             tabIndex={0}
           >
-            <BurgerIcon type={'primary'} />
+            <BurgerIcon type='primary' />
             <p className='text text_type_main-default ml-2 mr-10'>
               Конструктор
             </p>
           </div>
           <div
-            className={`${styles.menu_item} ${
-              isFeedActive ? styles.link_active : ''
-            }`}
+            className={clsx(styles.menu_item, {
+              [styles.link_active]: isFeedActive
+            })}
             onClick={onFeedClick}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -55,7 +56,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({
             role='button'
             tabIndex={0}
           >
-            <ListIcon type={'primary'} />
+            <ListIcon type='primary' />
             <p className='text text_type_main-default ml-2'>Лента заказов</p>
           </div>
         </div>
@@ -70,12 +71,12 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({
           role='button'
           tabIndex={0}
         >
-          <Logo className='' />
+          <Logo />
         </div>
         <div
-          className={`${styles.link_position_last} ${
-            isProfileActive ? styles.link_active : ''
-          }`}
+          className={clsx(styles.link_position_last, {
+            [styles.link_active]: isProfileActive
+          })}
           onClick={onProfileClick}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -85,7 +86,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({
           role='button'
           tabIndex={0}
         >
-          <ProfileIcon type={'primary'} />
+          <ProfileIcon type='primary' />
           <p className='text text_type_main-default ml-2'>
             {userName || 'Личный кабинет'}
           </p>

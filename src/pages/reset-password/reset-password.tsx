@@ -1,11 +1,14 @@
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from '../../services/store';
+import { selectIsAuthenticated } from '@selectors';
 
 import { resetPasswordApi } from '@api';
 import { ResetPasswordUI } from '@ui-pages';
 
 export const ResetPassword: FC = () => {
   const navigate = useNavigate();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
   const [password, setPassword] = useState('');
   const [token, setToken] = useState('');
   const [error, setError] = useState<Error | null>(null);
@@ -22,10 +25,14 @@ export const ResetPassword: FC = () => {
   };
 
   useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+      return;
+    }
     if (!localStorage.getItem('resetPassword')) {
       navigate('/forgot-password', { replace: true });
     }
-  }, [navigate]);
+  }, [navigate, isAuthenticated]);
 
   return (
     <ResetPasswordUI
