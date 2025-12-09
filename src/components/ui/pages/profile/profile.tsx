@@ -13,7 +13,9 @@ export const ProfileUI: FC<ProfileUIProps> = ({
   updateUserError,
   handleSubmit,
   handleCancel,
-  handleInputChange
+  handleInputChange,
+  handlePasswordKeyDown,
+  handlePasswordPaste
 }) => (
   <main className={`${commonStyles.container}`}>
     <div className={`mt-30 mr-15 ${styles.menu}`}>
@@ -55,6 +57,9 @@ export const ProfileUI: FC<ProfileUIProps> = ({
             type={'password'}
             placeholder={'Пароль'}
             onChange={handleInputChange}
+            onKeyDown={handlePasswordKeyDown}
+            onPaste={handlePasswordPaste}
+            autoComplete='new-password'
             value={formValue.password}
             name={'password'}
             error={false}
