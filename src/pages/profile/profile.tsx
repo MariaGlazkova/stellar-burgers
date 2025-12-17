@@ -31,10 +31,6 @@ export const Profile: FC = () => {
   const [isFormInitialized, setIsFormInitialized] = useState(false);
   const passwordInteractedRef = useRef(false);
 
-  useEffect(() => {
-    dispatch(fetchUser());
-  }, [dispatch]);
-
   const initialFormValueRef = useRef(formValue);
   useEffect(() => {
     if (user && !isFormInitialized) {

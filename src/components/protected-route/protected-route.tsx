@@ -18,16 +18,19 @@ export const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    if (accessToken && !isAuthenticated) {
+    // Avoid duplicate/concurrent user fetches (e.g. when page also dispatches fetchUser)
+    if (accessToken && !isAuthenticated && !isUserLoading) {
       dispatch(fetchUser());
     }
-  }, [dispatch, accessToken, isAuthenticated]);
+  }, [dispatch, accessToken, isAuthenticated, isUserLoading]);
 
-  if (isUserLoading && accessToken) {
+  // Show loader only while we're trying to restore auth from an existing token
+  if (isUserLoading && accessToken && !isAuthenticated) {
     return <Preloader />;
   }
 
-  if (!accessToken && !isAuthenticated) {
+  // If we are not authenticated (even if a stale token exists) — send to login
+  if (!isAuthenticated) {
     return <Navigate to='/login' replace state={{ from: location }} />;
   }
 
