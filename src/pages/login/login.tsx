@@ -1,4 +1,4 @@
-import { FC, SyntheticEvent, useEffect } from 'react';
+import { Dispatch, FC, SetStateAction, SyntheticEvent, useEffect } from 'react';
 import { useNavigate, useLocation, Location } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import { loginUser } from '../../services/slices/user-slice';
@@ -14,11 +14,18 @@ export const Login: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { values, handleChange } = useForm({ email: '', password: '' });
+  const { values, setFieldValue } = useForm({ email: '', password: '' });
   const error = useSelector(selectUserError);
-  const isLoading = useSelector(selectUserLoading);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const from = (location.state as { from?: Location })?.from?.pathname || '/';
+
+  const makeSetter =
+    (field: 'email' | 'password'): Dispatch<SetStateAction<string>> =>
+    (action) => {
+      const nextValue =
+        typeof action === 'function' ? action(values[field]) : action;
+      setFieldValue(field, nextValue);
+    };
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -35,13 +42,9 @@ export const Login: FC = () => {
     <LoginUI
       errorText={error || ''}
       email={values.email}
-      setEmail={(value) =>
-        handleChange({ target: { name: 'email', value } } as any)
-      }
+      setEmail={makeSetter('email')}
       password={values.password}
-      setPassword={(value) =>
-        handleChange({ target: { name: 'password', value } } as any)
-      }
+      setPassword={makeSetter('password')}
       handleSubmit={handleSubmit}
     />
   );

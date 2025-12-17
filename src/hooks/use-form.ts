@@ -10,5 +10,9 @@ export const useForm = <T extends TValues>(inputValues: T) => {
     setValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  return { values, handleChange, setValues };
+  const setFieldValue = (name: keyof T, value: string) => {
+    setValues((prev) => ({ ...prev, [name]: value }) as T);
+  };
+
+  return { values, handleChange, setFieldValue, setValues };
 };

@@ -1,4 +1,4 @@
-import { FC, SyntheticEvent, useEffect } from 'react';
+import { Dispatch, FC, SetStateAction, SyntheticEvent, useEffect } from 'react';
 import { useNavigate, useLocation, Location } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import { registerUser } from '../../services/slices/user-slice';
@@ -14,15 +14,24 @@ export const Register: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const { values, handleChange } = useForm({
+  const { values, setFieldValue } = useForm({
     userName: '',
     email: '',
     password: ''
   });
   const error = useSelector(selectUserError);
-  const isLoading = useSelector(selectUserLoading);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const from = (location.state as { from?: Location })?.from?.pathname || '/';
+
+  const makeSetter =
+    (
+      field: 'email' | 'password' | 'userName'
+    ): Dispatch<SetStateAction<string>> =>
+    (action) => {
+      const nextValue =
+        typeof action === 'function' ? action(values[field]) : action;
+      setFieldValue(field, nextValue);
+    };
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -47,15 +56,9 @@ export const Register: FC = () => {
       email={values.email}
       userName={values.userName}
       password={values.password}
-      setEmail={(value) =>
-        handleChange({ target: { name: 'email', value } } as any)
-      }
-      setPassword={(value) =>
-        handleChange({ target: { name: 'password', value } } as any)
-      }
-      setUserName={(value) =>
-        handleChange({ target: { name: 'userName', value } } as any)
-      }
+      setEmail={makeSetter('email')}
+      setPassword={makeSetter('password')}
+      setUserName={makeSetter('userName')}
       handleSubmit={handleSubmit}
     />
   );
