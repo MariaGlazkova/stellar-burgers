@@ -18,13 +18,11 @@ export const UnprotectedRoute: FC<UnprotectedRouteProps> = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    // Avoid duplicate/concurrent user fetches
     if (accessToken && !isAuthenticated && !isUserLoading) {
       dispatch(fetchUser());
     }
   }, [dispatch, accessToken, isAuthenticated, isUserLoading]);
 
-  // Show loader only while we're trying to restore auth from an existing token
   if (isUserLoading && accessToken && !isAuthenticated) {
     return <Preloader />;
   }
