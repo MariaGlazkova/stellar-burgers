@@ -50,14 +50,14 @@ export const ResetPasswordUI: FC<ResetPasswordUIProps> = ({
           </Button>
         </div>
         {errorText && (
-          <p
-            className={clsx(styles.error, 'text text_type_main-default pb-6')}
-          >
+          <p className={clsx(styles.error, 'text text_type_main-default pb-6')}>
             {errorText}
           </p>
         )}
       </form>
-      <div className={clsx(styles.question, 'text text_type_main-default pb-6')}>
+      <div
+        className={clsx(styles.question, 'text text_type_main-default pb-6')}
+      >
         Вспомнили пароль?
         <Link to='/login' className={clsx('pl-2', styles.link)}>
           Войти

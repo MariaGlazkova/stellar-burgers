@@ -69,7 +69,12 @@ export const OrderCardUI: FC<OrderCardUIProps> = memo(
                     alt={ingredient.name}
                   />
                   {isLastVisible ? (
-                    <span className={clsx('text text_type_digits-default', styles.remains)}>
+                    <span
+                      className={clsx(
+                        'text text_type_digits-default',
+                        styles.remains
+                      )}
+                    >
                       {orderInfo.remains > 0 ? `+${orderInfo.remains}` : null}
                     </span>
                   ) : null}
@@ -78,7 +83,12 @@ export const OrderCardUI: FC<OrderCardUIProps> = memo(
             })}
           </ul>
           <div>
-            <span className={clsx('text text_type_digits-default pr-1', styles.order_total)}>
+            <span
+              className={clsx(
+                'text text_type_digits-default pr-1',
+                styles.order_total
+              )}
+            >
               {orderInfo.total}
             </span>
             <CurrencyIcon type='primary' />

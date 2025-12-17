@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 import styles from './app-header.module.css';
 import { TAppHeaderUIProps } from './type';
@@ -11,10 +12,8 @@ import {
 
 export const AppHeaderUI: FC<TAppHeaderUIProps> = ({
   userName,
-  onProfileClick,
-  onConstructorClick,
-  onFeedClick,
-  pathname = ''
+  pathname = '',
+  profilePath = '/profile'
 }) => {
   const isConstructorActive =
     pathname === '/' || pathname.startsWith('/ingredients');
@@ -25,72 +24,71 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({
     <header className={styles.header}>
       <nav className={clsx(styles.menu, 'p-4')}>
         <div className={styles.menu_part_left}>
-          <div
-            className={clsx(styles.menu_item, {
-              [styles.link_active]: isConstructorActive
-            })}
-            onClick={onConstructorClick}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                onConstructorClick?.();
-              }
-            }}
-            role='button'
-            tabIndex={0}
-          >
-            <BurgerIcon type='primary' />
-            <p className='text text_type_main-default ml-2 mr-10'>
-              Конструктор
-            </p>
-          </div>
-          <div
-            className={clsx(styles.menu_item, {
-              [styles.link_active]: isFeedActive
-            })}
-            onClick={onFeedClick}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                onFeedClick?.();
-              }
-            }}
-            role='button'
-            tabIndex={0}
-          >
-            <ListIcon type='primary' />
-            <p className='text text_type_main-default ml-2'>Лента заказов</p>
-          </div>
-        </div>
-        <div
-          className={styles.logo}
-          onClick={onConstructorClick}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              onConstructorClick?.();
+          <NavLink
+            to='/'
+            className={({ isActive }) =>
+              clsx(styles.menu_item, styles.link, {
+                [styles.link_active]: isActive || isConstructorActive
+              })
             }
-          }}
-          role='button'
-          tabIndex={0}
-        >
-          <Logo />
-        </div>
-        <div
-          className={clsx(styles.link_position_last, {
-            [styles.link_active]: isProfileActive
-          })}
-          onClick={onProfileClick}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              onProfileClick?.();
+            end
+          >
+            {({ isActive }) => {
+              const active = isActive || isConstructorActive;
+              return (
+                <>
+                  <BurgerIcon type={active ? 'primary' : 'secondary'} />
+                  <span className='text text_type_main-default'>
+                    Конструктор
+                  </span>
+                </>
+              );
+            }}
+          </NavLink>
+          <NavLink
+            to='/feed'
+            className={({ isActive }) =>
+              clsx(styles.menu_item, styles.link, {
+                [styles.link_active]: isActive || isFeedActive
+              })
             }
-          }}
-          role='button'
-          tabIndex={0}
-        >
-          <ProfileIcon type='primary' />
-          <p className='text text_type_main-default ml-2'>
-            {userName || 'Личный кабинет'}
-          </p>
+          >
+            {({ isActive }) => {
+              const active = isActive || isFeedActive;
+              return (
+                <>
+                  <ListIcon type={active ? 'primary' : 'secondary'} />
+                  <span className='text text_type_main-default'>
+                    Лента заказов
+                  </span>
+                </>
+              );
+            }}
+          </NavLink>
         </div>
+        <Link to='/' className={styles.logo} aria-label='На главную'>
+          <Logo className='' />
+        </Link>
+        <NavLink
+          to={profilePath}
+          className={({ isActive }) =>
+            clsx(styles.menu_item, styles.link_position_last, styles.link, {
+              [styles.link_active]: isActive || isProfileActive
+            })
+          }
+        >
+          {({ isActive }) => {
+            const active = isActive || isProfileActive;
+            return (
+              <>
+                <ProfileIcon type={active ? 'primary' : 'secondary'} />
+                <span className='text text_type_main-default'>
+                  {userName || 'Личный кабинет'}
+                </span>
+              </>
+            );
+          }}
+        </NavLink>
       </nav>
     </header>
   );

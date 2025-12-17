@@ -6,11 +6,11 @@ import { fetchUser } from '../../services/slices/user-slice';
 import { getCookie } from '../../utils/cookie';
 import { Preloader } from '@ui';
 
-interface ProtectedRouteProps {
+interface UnprotectedRouteProps {
   children: ReactNode;
 }
 
-export const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
+export const UnprotectedRoute: FC<UnprotectedRouteProps> = ({ children }) => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const isUserLoading = useSelector(selectUserLoading);
@@ -27,8 +27,8 @@ export const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
     return <Preloader />;
   }
 
-  if (!accessToken && !isAuthenticated) {
-    return <Navigate to='/login' replace state={{ from: location }} />;
+  if (isAuthenticated) {
+    return <Navigate to='/' replace state={{ from: location }} />;
   }
 
   return <>{children}</>;

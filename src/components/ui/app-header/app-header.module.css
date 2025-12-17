@@ -5,17 +5,26 @@
   display: flex;
   align-items: center;
   max-width: 1240px;
-  height: 56px;
+  min-height: 56px;
   margin: 0 auto;
+  gap: 8px;
+}
+
+.menu_item {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 16px 20px;
+  gap: 8px;
 }
 
 .menu_part_left {
   display: flex;
   flex-basis: 35%;
+  gap: 8px;
 }
 
 .link {
-  display: flex;
   text-decoration: none;
   color: var(--text-inactive-color);
 }
@@ -28,6 +37,7 @@
   display: flex;
   justify-content: flex-end;
   flex-basis: 35%;
+  align-items: center;
 }
 
 .logo {

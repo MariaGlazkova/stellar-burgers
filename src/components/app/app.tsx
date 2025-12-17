@@ -1,4 +1,11 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Location
+} from 'react-router-dom';
 import {
   ConstructorPage,
   Feed,
@@ -6,6 +13,8 @@ import {
   Register,
   ForgotPassword,
   ResetPassword,
+  IngredientPage,
+  OrderInfoPage,
   Profile,
   ProfileOrders,
   NotFound404
@@ -16,24 +25,64 @@ import styles from './app.module.css';
 import {
   AppHeader,
   ProtectedRoute,
+  UnprotectedRoute,
   FeedOrderModal,
   IngredientModal,
   ProfileOrderModal
 } from '@components';
+import { useDispatch } from '../../services/store';
+import { fetchIngredients } from '../../services/slices/ingredients-slice';
 
-const App = () => (
-  <BrowserRouter>
+const AppContent = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const state = location.state as { background?: Location } | null;
+  const background = state?.background;
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, [dispatch]);
+
+  return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes>
+      <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
-        <Route path='/feed/:number' element={<FeedOrderModal />} />
-        <Route path='/ingredients/:id' element={<IngredientModal />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path='/reset-password' element={<ResetPassword />} />
+        <Route path='/feed/:number' element={<OrderInfoPage />} />
+        <Route path='/ingredients/:id' element={<IngredientPage />} />
+        <Route
+          path='/login'
+          element={
+            <UnprotectedRoute>
+              <Login />
+            </UnprotectedRoute>
+          }
+        />
+        <Route
+          path='/register'
+          element={
+            <UnprotectedRoute>
+              <Register />
+            </UnprotectedRoute>
+          }
+        />
+        <Route
+          path='/forgot-password'
+          element={
+            <UnprotectedRoute>
+              <ForgotPassword />
+            </UnprotectedRoute>
+          }
+        />
+        <Route
+          path='/reset-password'
+          element={
+            <UnprotectedRoute>
+              <ResetPassword />
+            </UnprotectedRoute>
+          }
+        />
         <Route
           path='/profile'
           element={
@@ -54,13 +103,34 @@ const App = () => (
           path='/profile/orders/:number'
           element={
             <ProtectedRoute>
-              <ProfileOrderModal />
+              <OrderInfoPage />
             </ProtectedRoute>
           }
         />
         <Route path='*' element={<NotFound404 />} />
       </Routes>
+
+      {background && (
+        <Routes>
+          <Route path='/feed/:number' element={<FeedOrderModal />} />
+          <Route path='/ingredients/:id' element={<IngredientModal />} />
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <ProtectedRoute>
+                <ProfileOrderModal />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      )}
     </div>
+  );
+};
+
+const App = () => (
+  <BrowserRouter>
+    <AppContent />
   </BrowserRouter>
 );
 

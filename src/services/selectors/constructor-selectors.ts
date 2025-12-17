@@ -1,11 +1,5 @@
-import { RootState } from '../store';
-
-export const selectConstructorBun = (state: RootState) =>
-  state.burgerConstructor.bun;
-export const selectConstructorIngredients = (state: RootState) =>
-  state.burgerConstructor.ingredients;
-
-export const selectConstructorItems = (state: RootState) => ({
-  bun: state.burgerConstructor.bun,
-  ingredients: state.burgerConstructor.ingredients
-});
+export {
+  selectConstructorBun,
+  selectConstructorIngredients,
+  selectConstructorItems
+} from '../slices/constructor-slice';

@@ -73,7 +73,9 @@ export const RegisterUI: FC<RegisterUIProps> = ({
           )}
         </>
       </form>
-      <div className={clsx(styles.question, 'text text_type_main-default pb-6')}>
+      <div
+        className={clsx(styles.question, 'text text_type_main-default pb-6')}
+      >
         Уже зарегистрированы?
         <Link to='/login' className={clsx('pl-2', styles.link)}>
           Войти
