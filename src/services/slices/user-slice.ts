@@ -104,14 +104,13 @@ export const logoutUser = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await logoutApi();
+    } catch (error) {
+      console.warn('Logout request failed:', error);
+    } finally {
       localStorage.removeItem('refreshToken');
       deleteCookie('accessToken');
-      return true;
-    } catch (error) {
-      return rejectWithValue(
-        (error as { message?: string }).message || 'Ошибка выхода'
-      );
     }
+    return true;
   }
 );
 
@@ -167,6 +166,8 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUser.rejected, (state) => {
+        localStorage.removeItem('refreshToken');
+        deleteCookie('accessToken');
         state.isLoading = false;
         state.isAuthenticated = false;
         state.user = null;

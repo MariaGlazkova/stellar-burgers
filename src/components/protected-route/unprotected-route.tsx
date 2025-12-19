@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Location, Navigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from '../../services/store';
 import { selectIsAuthenticated, selectUserLoading } from '@selectors';
 import { fetchUser } from '../../services/slices/user-slice';
@@ -16,6 +16,7 @@ export const UnprotectedRoute: FC<UnprotectedRouteProps> = ({ children }) => {
   const isUserLoading = useSelector(selectUserLoading);
   const accessToken = getCookie('accessToken');
   const location = useLocation();
+  const from = (location.state as { from?: Location })?.from?.pathname || '/';
 
   useEffect(() => {
     if (accessToken && !isAuthenticated && !isUserLoading) {
@@ -23,12 +24,12 @@ export const UnprotectedRoute: FC<UnprotectedRouteProps> = ({ children }) => {
     }
   }, [dispatch, accessToken, isAuthenticated, isUserLoading]);
 
-  if (isUserLoading && accessToken && !isAuthenticated) {
+  if (accessToken && !isAuthenticated) {
     return <Preloader />;
   }
 
   if (isAuthenticated) {
-    return <Navigate to='/' replace state={{ from: location }} />;
+    return <Navigate to={from} replace />;
   }
 
   return <>{children}</>;

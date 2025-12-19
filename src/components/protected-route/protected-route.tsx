@@ -23,7 +23,7 @@ export const ProtectedRoute: FC<ProtectedRouteProps> = ({ children }) => {
     }
   }, [dispatch, accessToken, isAuthenticated, isUserLoading]);
 
-  if (isUserLoading && accessToken && !isAuthenticated) {
+  if (accessToken && !isAuthenticated) {
     return <Preloader />;
   }
 

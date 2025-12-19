@@ -1,8 +1,6 @@
 import { setCookie, getCookie } from './cookie';
 import { TIngredient, TOrder, TOrdersData, TUser } from './types';
 
-// API base url is expected to be provided via env (see README /.env.example).
-// Fallback keeps the app usable even if env var isn't configured in dev.
 const DEFAULT_API_URL = 'https://norma.nomoreparties.space/api';
 const URL = (process.env.BURGER_API_URL || DEFAULT_API_URL).replace(/\/$/, '');
 

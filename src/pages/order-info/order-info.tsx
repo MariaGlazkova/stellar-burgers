@@ -13,6 +13,7 @@ import {
 } from '../../services/slices/order-slice';
 import { OrderInfo } from '@components';
 import { Preloader } from '@ui';
+import styles from './order-info.module.css';
 
 export const OrderInfoPage: FC = () => {
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ export const OrderInfoPage: FC = () => {
   }
 
   return (
-    <section className='pt-10'>
+    <section className={`pt-10 ${styles.container}`}>
       <h2 className='text text_type_main-large mb-8'>Детали заказа</h2>
       <OrderInfo />
     </section>

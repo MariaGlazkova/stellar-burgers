@@ -1,5 +1,5 @@
 import { FC, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
@@ -19,6 +19,7 @@ import { getCookie } from '../../utils/cookie';
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const bun = useSelector((state) => state.burgerConstructor.bun);
   const ingredients = useSelector(
     (state) => state.burgerConstructor.ingredients
@@ -40,7 +41,7 @@ export const BurgerConstructor: FC = () => {
 
     const accessToken = getCookie('accessToken');
     if (!accessToken || !isAuthenticated) {
-      navigate('/login');
+      navigate('/login', { replace: true, state: { from: location } });
       return;
     }
 

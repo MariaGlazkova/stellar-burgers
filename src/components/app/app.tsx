@@ -36,8 +36,16 @@ import { fetchIngredients } from '../../services/slices/ingredients-slice';
 const AppContent = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const state = location.state as { background?: Location } | null;
-  const background = state?.background;
+  const state = location.state as unknown;
+  const background =
+    state &&
+    typeof state === 'object' &&
+    'background' in state &&
+    (state as { background?: unknown }).background &&
+    typeof (state as { background: { pathname?: unknown } }).background
+      .pathname === 'string'
+      ? ((state as { background: Location }).background as Location)
+      : undefined;
 
   useEffect(() => {
     dispatch(fetchIngredients());
