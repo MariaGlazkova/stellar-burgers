@@ -1,5 +1,7 @@
-import { FC, useState, SyntheticEvent } from 'react';
+import { FC, useState, SyntheticEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from '../../services/store';
+import { selectIsAuthenticated } from '@selectors';
 
 import { forgotPasswordApi } from '@api';
 import { ForgotPasswordUI } from '@ui-pages';
@@ -9,6 +11,13 @@ export const ForgotPassword: FC = () => {
   const [error, setError] = useState<Error | null>(null);
 
   const navigate = useNavigate();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();

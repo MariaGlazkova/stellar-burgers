@@ -1,3 +1,5 @@
 export type TAppHeaderUIProps = {
-  userName: string | undefined;
+  userName?: string;
+  pathname?: string;
+  profilePath?: string;
 };
