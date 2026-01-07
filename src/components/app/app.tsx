@@ -30,11 +30,17 @@ import {
   IngredientModal,
   ProfileOrderModal
 } from '@components';
-import { useDispatch } from '../../services/store';
+import { useDispatch, useSelector } from '../../services/store';
 import { fetchIngredients } from '../../services/slices/ingredients-slice';
+import { fetchUser } from '../../services/slices/user-slice';
+import { selectIsAuthenticated, selectUserLoading } from '@selectors';
+import { getCookie } from '../../utils/cookie';
 
 const AppContent = () => {
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const isUserLoading = useSelector(selectUserLoading);
+  const accessToken = getCookie('accessToken');
   const location = useLocation();
   const state = location.state as unknown;
   const background =
@@ -50,6 +56,12 @@ const AppContent = () => {
   useEffect(() => {
     dispatch(fetchIngredients());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (accessToken && !isAuthenticated && !isUserLoading) {
+      dispatch(fetchUser());
+    }
+  }, [dispatch, accessToken, isAuthenticated, isUserLoading]);
 
   return (
     <div className={styles.app}>
