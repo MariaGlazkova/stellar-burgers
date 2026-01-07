@@ -1,4 +1,9 @@
 import { rootReducer } from '../root-reducer';
+import { initialState as ingredientsInitialState } from '../slices/ingredients-slice';
+import { initialState as constructorInitialState } from '../slices/constructor-slice';
+import { initialState as orderInitialState } from '../slices/order-slice';
+import { initialState as userInitialState } from '../slices/user-slice';
+import { initialState as feedInitialState } from '../slices/feed-slice';
 
 describe('rootReducer', () => {
   it('should return correct initial state when called with undefined state and unknown action', () => {
@@ -6,35 +11,11 @@ describe('rootReducer', () => {
     const state = rootReducer(undefined, action);
 
     expect(state).toEqual({
-      ingredients: {
-        items: [],
-        isLoading: false,
-        error: null
-      },
-      burgerConstructor: {
-        bun: null,
-        ingredients: []
-      },
-      order: {
-        orderData: null,
-        userOrders: [],
-        isLoading: false,
-        error: null,
-        orderRequest: false
-      },
-      user: {
-        user: null,
-        isLoading: false,
-        error: null,
-        isAuthenticated: false
-      },
-      feed: {
-        orders: [],
-        total: 0,
-        totalToday: 0,
-        isLoading: false,
-        error: null
-      }
+      ingredients: ingredientsInitialState,
+      burgerConstructor: constructorInitialState,
+      order: orderInitialState,
+      user: userInitialState,
+      feed: feedInitialState
     });
   });
 
